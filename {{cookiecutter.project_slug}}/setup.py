@@ -3,6 +3,7 @@
 """The setup script."""
 
 from setuptools import setup, find_packages
+import os
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -10,7 +11,13 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [{%- if cookiecutter.command_line_interface|lower == 'click' %}'Click>=7.0',{%- endif %} ]
+requirements = []
+with open(os.path.join('requirements', 'default.txt')) as f:
+    for line in f:
+        splitted = line.split("#")
+        stripped = splitted[0].strip()
+        if len(stripped) > 0:
+            requirements.append(stripped)
 
 setup_requirements = [{%- if cookiecutter.use_pytest == 'y' %}'pytest-runner',{%- endif %} ]
 
